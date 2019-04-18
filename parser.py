@@ -3,9 +3,11 @@
   @author : zhongxiu yang
 """
 
+import sys
 
 def get_data(infile):
     pass
+
 
 def main():
     # fetch the path and name to a memory trace file
