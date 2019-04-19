@@ -18,7 +18,7 @@ def get_data(filename):
             try:
                 pc, md, va = line.split()
                 pc = pc[:-1]
-                yield pc, md, va
+                yield int(pc), md, int(va)
             except ValueError:
                 print("Invalid value received")
 
