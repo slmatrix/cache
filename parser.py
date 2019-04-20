@@ -15,11 +15,10 @@ def main():
 def get_data(filename):
     with open(filename) as f:
         for line in f:
-            try:
-                pc, md, va = line.split()
-                pc = pc[:-1]
-                yield int(pc), md, int(va)
-            except ValueError:
+            tokens = line.split()
+            if len(tokens) == 3:
+                yield int(tokens[0][-2], 16), tokens[1], int(tokens[2], 16)
+            else:
                 print("Invalid value received")
 
 
