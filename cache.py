@@ -13,8 +13,9 @@ class set:
     def __init__(self, r_policy, n_way):
         self.n_way    = n_way;
         self.r_policy = r_policy;
+        self.tags     = dict();
 
-        self.tags = dict();
+        #create and initialize the cache lines in the set
         self.blocks = dummy = linked_list(None, None);
         for line in range(0, n_way):
             dummy.next = node(line(0, 0, 0), None);
