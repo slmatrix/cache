@@ -4,11 +4,6 @@ class node:
         self.next = next;
 
 
-class linked_list:
-    def __init__(self, head):
-        self.head = head;
-
-
 class line:
     def __init__(self, valid, dirty, tag):
         self.tag   = tag;
@@ -38,8 +33,11 @@ class cache_set:
 
     def replace(self, tag):
         if self.r_policy   == "LRU":
-            pass;
+            if len(self.tags) <= self.n_way:
+                self.tags[tag] = self.blocks.next;
+
         elif self.r_policy == "SC":
             pass;
+
         elif self.r_policy == "FIFO":
             pass;

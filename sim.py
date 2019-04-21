@@ -20,7 +20,10 @@ def main(argv):
 
     miss   = 0
     access = 0
-    cache = [cache_set("LRU",2**n_way)] * int((2**(cache_sz - line_sz - n_way)))
+    cache  = []
+    for i in range((2**(cache_sz - line_sz - n_way))):
+        cache.append(cache_set("LRU", 2**n_way))
+
     for pc, md, va in get_data(argv[1]):
         offset = va & ((1 << line_sz) - 1);       #only offset bits are unmasked
         va     = va >> line_sz;                              #remove offset bits
@@ -31,11 +34,10 @@ def main(argv):
         if cache[index].search(tag) == False:
             miss += 1;
 
-            cache[index].tag   = tag;
-            cache[index].valid = 1;
-
         access += 1;
 
+    print("Miss  : ", miss);
+    print("Access: ", access);
     print("Miss ratio: ", miss/access);
 
 
