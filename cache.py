@@ -52,13 +52,11 @@ class cache_set:
                 self.blocks.next         = self.tags[tag];
             else:        #REPLACEMENT POLICY - overwrite LRU slot with new block
                 temp = self.evict.prev;
-                print("xxxxx", self.evict.data)
-                print(self.evict.data.tag)
                 self.tags.pop(self.evict.data.tag);  #remove the LRU'd block tag
 
-                self.evict.data = tag;                #overwrite the LRU'd block
-                self.evict.prev = self.blocks;
-                self.evict.next = self.blocks.next;
+                self.evict.data.tag = tag;            #overwrite the LRU'd block
+                self.evict.prev     = self.blocks;
+                self.evict.next     = self.blocks.next;
 
                 self.blocks.next.prev = self.evict;   #place at from 'cuz access
                 self.blocks.next      = self.evict;

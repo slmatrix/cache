@@ -36,9 +36,9 @@ def main(argv):
 
         access += 1;
 
-    print("Miss  : ", miss);
-    print("Access: ", access);
-    print("Miss ratio: ", miss/access);
+    print("Miss     : ", miss);
+    print("Access   : ", access);
+    print("Miss rate: ", (miss/access)*100, "%");
 
 
 if __name__ == "__main__":
