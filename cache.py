@@ -33,7 +33,10 @@ class cache_set:
 
     def replace(self, tag):
         if self.r_policy == "LRU":
-            if tag in self.tags and len(self.tags) > 1:
+            if tag in self.tags:            #update block locale; not evict soon
+                if len(self.tags) == 1:  #edge case: only one blk, no reordering
+                    return ;
+
                 temp = self.evict;
                 if self.tags[tag] == self.evict:      #update LRU'd block locale
                     temp = self.evict.prev;
