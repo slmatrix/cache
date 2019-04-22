@@ -33,7 +33,7 @@ class cache_set:
 
     def replace(self, tag):
         if self.r_policy == "LRU":
-            if tag in self.tags:    #update location to head to prevent eviction
+            if tag in self.tags and len(self.tags) > 1:
                 temp = self.evict;
                 if self.tags[tag] == self.evict:      #update LRU'd block locale
                     temp = self.evict.prev;
@@ -41,11 +41,12 @@ class cache_set:
                 self.tags[tag].prev.next = self.tags[tag].next;
                 self.tags[tag].prev      = self.blocks;
                 self.tags[tag].next      = self.blocks.next;
+
+                self.blocks.next.prev    = self.tags[tag];
                 self.blocks.next         = self.tags[tag];
 
-                if len(self.tags) > 1:
-                    self.evict      = temp; #edge case: in-case LRU'd was referenced
-                    self.evict.next = None;
+                self.evict      = temp; #edge case: in-case LRU'd was referenced
+                self.evict.next = None;
             elif len(self.tags) < self.n_way: #does set have unallocated slots?
                 if self.blocks.next == None:               #allocate first block
                     self.blocks.next = node(line(1, 0, tag), self.blocks, None);
