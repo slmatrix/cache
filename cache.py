@@ -21,7 +21,7 @@ class cache_set:
 
         #create and initialize the first cache line object in the set
         self.blocks = node(None, None, None); #head pointer (most recently used)
-        self.evict  = self.blocks;           #tail pointer (leastly recent used)
+        self.evict  = self.blocks.next;      #tail pointer (leastly recent used)
 
     def search(self, tag):
         if tag in self.tags:    #need to update existing block's eviction notice
@@ -49,8 +49,7 @@ class cache_set:
                 self.blocks.next         = self.tags[tag];
 
                 self.evict      = temp; #edge case: in-case LRU'd was referenced
-                self.evict.next = None;
-            elif len(self.tags) < self.n_way: #does set have unallocated slots?
+            elif len(self.tags) < self.n_way:  #does set have unallocated slots?
                 if self.blocks.next == None:               #allocate first block
                     self.blocks.next = node(line(1, 0, tag), self.blocks, None);
                     self.tags[tag]   = self.blocks.next;
@@ -82,87 +81,3 @@ class cache_set:
 
         elif self.r_policy == "FIFO":
             pass;
-
-
-"""
-struct fl_entry
-{                                      /* frames represented by a linked list */
-  uint64_t frame_number;         /* O(n) lookup of frame number, O(1) updates */
-  uint64_t* pt_entry;         /* unset old valid-bit & assign new page->frame */
-  struct fl_entry* next;              /* order of frames represent LRU policy */
-};
-
-void update_fl(struct fl_entry* frames,
-               uint64_t         frame_number)
-{
-  struct fl_entry* dummy = frames->next;
-  while(true)
-  {
-    if(frames->next->frame_number == frame_number)        /* most recent page */
-    {                                                       /* accessed again */
-      return ;
-    }
-    else if(dummy->next->frame_number == frame_number)
-    {                           /* update page access, relative to frame list */
-      struct fl_entry* swap = dummy->next;
-      dummy->next = dummy->next->next;
-      swap->next = frames->next;
-      frames->next = swap;
-      break;
-    }
-    else
-    {
-      dummy = dummy->next;
-    }
-  }
-}
-
-void handle_page_fault(struct fl_entry* frames,
-                       uint64_t*        page_table,
-                       uint64_t         page_number)
-{
-  static uint64_t frames_allocated = 0;      //first page is allocated to kernel
-  struct fl_entry* dummy = frames->next;
-  while(true)
-  {
-    if(frames->next->frame_number == UNALLOCATED)     /* base-case: no memory */
-    {                                                        /* allocated yet */
-      frames_allocated += 1;
-      frames->next->frame_number = frames_allocated;
-      frames->next->pt_entry = page_table+page_number; /* reverse mapping PTE */
-      page_table[page_number] = frames->next->frame_number;
-      break;
-    }
-    else if(dummy->frame_number != UNALLOCATED &&        /* found unallocated */
-            dummy->next->frame_number == UNALLOCATED)      /* frame in memory */
-    {
-      struct fl_entry* swap = dummy->next;                     /* empty frame */
-      dummy->next = dummy->next->next;           /* remove from orig position */
-      swap->next = frames->next;          /* and place at head; recent access */
-      frames->next = swap;
-
-      frames_allocated += 1;
-      swap->frame_number = frames_allocated;
-      swap->pt_entry = page_table+page_number;     /* new reverse mapping PTE */
-      page_table[page_number] = swap->frame_number;
-      break;
-    }
-    else if(dummy->next->next == NULL)                    /* PAGE REPLACEMENT */
-    {
-      struct fl_entry* swap = dummy->next;          /* evict frame; overwrite */
-      dummy->next = NULL;                         /* dummy is now at end; LRU */
-      swap->next = frames->next;                    /* place new page at head */
-      frames->next = swap;
-
-      *(swap->pt_entry) = DISK;                         /* invalidate old PTE */
-      swap->pt_entry = page_table+page_number;     /* new reverse mapping PTE */
-      page_table[page_number] = swap->frame_number;             /* update PTE */
-      break;
-    }
-    else
-    {
-      dummy = dummy->next;
-    }
-  }
-}
-"""
