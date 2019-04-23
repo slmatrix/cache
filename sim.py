@@ -11,8 +11,10 @@ def main(argv):
     #default cache configuration - in bits
     n_way    = int(math.log(0x10    , 0x2));                             #16-way
     line_sz  = int(math.log(0x40    , 0x2));                                #64B
+    #cache_sz = int(math.log(0x400, 0x2));                                   #1KB
     cache_sz = int(math.log(0x8000, 0x2));                                 #32KB
     #cache_sz = int(math.log(0x40000, 0x2));                               #256KB
+    #cache_sz = int(math.log(0x100000, 0x2));                                #1MB
     #cache_sz = int(math.log(0x100000, 0x2));                                #1MB
     #cache_sz = int(math.log(0x400000, 0x2));                                #4MB
 
@@ -34,13 +36,8 @@ def main(argv):
         va     = va >> (cache_sz - line_sz - n_way);          #remove index bits
         tag    = va;                                       #only tag bits remain
         
-        print("offset:", offset);
-        print("index :", index);
-        print("tag   :", tag);
-#        print(cache[index]);
         if cache[index].search(tag) == False:
-            if md == "R":
-                miss += 1;
+            miss += 1;
 
         access += 1;
 
