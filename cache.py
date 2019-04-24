@@ -6,7 +6,6 @@ class line:
         self.valid = valid;
         self.dirty = dirty;
         self.data  = [None] * 0x40
-
         self.second_chance = second_chance; #used only for SC replacement policy
 
 

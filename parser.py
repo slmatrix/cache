@@ -1,5 +1,5 @@
 """
-  @brief  : parse.py handles reading in cache sequence
+  @brief  : parser.py handles reading in cache sequence
   @author : zhongxiu yang
 """
 
