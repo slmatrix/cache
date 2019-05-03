@@ -56,7 +56,7 @@ def main(argv):
 
     # print("Miss     : ", miss);
     # print("Access   : ", access);
-    print("Cache miss rate: ", round((miss/access)*100, 2), "%");
+    print("Cache miss rate: ", round((miss/access)*100, 2), "%", sep='');
 
 
 if __name__ == "__main__":
